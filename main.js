@@ -156,33 +156,31 @@ controls.enableDamping = true;
 controls.dampingFactor = 0.05;
 
 
-// Function to create and rotate asteroids around planets
+
+  
 function createAsteroids(planet, count, minRadius, maxRadius) {
   const asteroidGroup = new THREE.Group();
-  const textureLoader = new THREE.TextureLoader();
   
-  // Load the texture once for all asteroids
-  const asteroidTexture = textureLoader.load(
-    'img/asteroid.jpeg',
+  const asteroidTexture = new THREE.TextureLoader().load(
+    '../img/asteroid1.jpg',
+    () => console.log("Asteroid texture loaded successfully."),
     undefined,
-    undefined,
-    (error) => console.error('An error occurred while loading the asteroid texture:', error)
+    (error) => console.log("Error loading asteroid texture:", error)
   );
-
-  const asteroidMaterial = new THREE.MeshStandardMaterial({ 
-    map: asteroidTexture,
-    roughness: 0.8,
-    metalness: 0.2
+  
+  const asteroidMaterial = new THREE.MeshBasicMaterial({ 
+    map: asteroidTexture
   });
 
   for (let i = 0; i < count; i++) {
     let asteroidGeometry;
     const randomShape = Math.random();
+    const size = Math.random() * 0.05 + 0.05; // Random size between 0.05 and 0.1
     
     if (randomShape < 0.50) {
-      asteroidGeometry = new THREE.SphereGeometry(0.1, 8, 8);
-    } else if (randomShape < 1) {
-      asteroidGeometry = new THREE.IcosahedronGeometry(0.12);
+      asteroidGeometry = new THREE.SphereGeometry(size, 8, 8);
+    } else {
+      asteroidGeometry = new THREE.IcosahedronGeometry(size);
     }
 
     const asteroid = new THREE.Mesh(asteroidGeometry, asteroidMaterial);
